@@ -4,6 +4,7 @@ module GitGraph
   module GitHub
     class Client
       attr_reader :client
+      include Enumerable
 
       def initialize(configuration)
         @client = Octokit::Client.new(
@@ -32,6 +33,9 @@ module GitGraph
       end
       alias_method :user_size, :user_count
 
+      def each
+        @stored_users.each { |name, user| yield(name, user) }
+      end
     end
   end
 end

@@ -45,11 +45,13 @@ RSpec.describe GitGraph::GitHub::Client do
     end
 
     it 'can add a new github user by key' do
-      expect{ client.add_user(ENV["testname"]) }.to change(client, :user_count).by 1
+      expect { client.add_user(ENV["testname"]) }.to change(client, :user_count).by 1
     end
 
     it 'aliases store' do
       expect { client << ENV["testname"] }.to change(client, :user_count).by 1
     end
+
+    specify { expect { |block| client.each(&block) }.to yield_control }
   end
 end
