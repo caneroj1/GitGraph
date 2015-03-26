@@ -1,6 +1,7 @@
 require 'octokit'
 require_relative '../configuration'
 require_relative 'graphable_object'
+require_relative 'feature'
 
 module GitGraph
   module GitHub
@@ -18,6 +19,8 @@ module GitGraph
           GitGraph::Configuration.username =>
           @client.user
         }
+
+        @data_to_graph = {}
       end
 
       def get_user(key)
@@ -37,6 +40,12 @@ module GitGraph
 
       def each
         @stored_users.each { |name, user| yield(name, user) }
+      end
+
+      def compare_languages
+        data = GitGraph::GitHub::Feature.compare_languages(self)
+        graphable = GitGraph::GitHub::GraphableObject.new(data)
+        @data_to_graph[:languages] = graphable
       end
     end
   end

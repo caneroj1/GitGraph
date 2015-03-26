@@ -14,11 +14,12 @@ module GitGraph
 
 
       def stringify(chart_type, options = {})
-        map_colors_to_datasets(format_options(options))
+        new_options = format_options(options)
+        map_colors_to_datasets(new_options)
         if chart_type == :polar_area
-          format_for_polar_area
+          format_for_polar_area(new_options)
         else
-          format
+          format_chart(new_options)
         end
       end
 
@@ -32,7 +33,9 @@ module GitGraph
 
         fill_color = new_color(base_color, options[:fill_alpha])
         stroke_color = new_color(base_color, options[:stroke_alpha])
-        { :fillColor => fill_color, :strokeColor => stroke_color, :pointColor => stroke_color }
+        { :fillColor => fill_color, :strokeColor => stroke_color, :pointColor => stroke_color,
+          :pointStrokeColor => options[:point_stroke_color], :pointHighlightFill => options[:point_highlight_fill],
+          :pointHighlightStroke => stroke_color }
       end
 
       def new_color(color, alpha)
@@ -41,8 +44,45 @@ module GitGraph
 
       def format_options(options)
         options[:fill_alpha] ||= 0.2
-        options[:stroke_alpha] ||= 0.1
+        options[:stroke_alpha] ||= 1.0
+        options[:point_stroke_color] ||= '#fff'
+        options[:point_highlight_fill] ||= '#fff'
         options
+      end
+
+      private
+      def format_chart(new_options)
+        main_string = "var data = {\n"
+        main_string << make_labels
+        main_string << make_datasets
+        main_string << "\n};"
+      end
+
+      def make_labels
+        "\tlabels: #{@labels.inspect},\n"
+      end
+
+      def make_datasets
+        main_string = "\tdatasets: ["
+        dataset_string_array = []
+
+        @datasets.each do |dataset|
+          new_string = "\n\t\t{\n"
+          dataset_string_components = []
+          
+          dataset.each_pair do |key, value|
+            value = value.class.eql?(String) ? "\"#{value}\"" : value
+            dataset_string_components.push("\t\t\t#{key}: #{value}")
+          end
+
+          new_string << dataset_string_components.join(",\n")
+          new_string << "\n\t\t}"
+
+          dataset_string_array.push(new_string)
+        end
+
+        main_string << dataset_string_array.join(',')
+        main_string << "\n\t]"
       end
     end
   end

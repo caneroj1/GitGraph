@@ -4,6 +4,7 @@ module GitGraph
   module GitHub
     class GraphableObject
       attr_accessor :changed, :data
+      attr_reader :string
 
       # data should be a graphable data object or nil
       def initialize(data = nil)

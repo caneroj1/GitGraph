@@ -53,5 +53,9 @@ RSpec.describe GitGraph::GitHub::Client do
     end
 
     specify { expect { |block| client.each(&block) }.to yield_control }
+
+    it 'can compare languages' do
+      
+    end
   end
 end
