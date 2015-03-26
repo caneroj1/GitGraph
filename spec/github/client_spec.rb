@@ -18,7 +18,7 @@ RSpec.describe GitGraph::GitHub::Client do
     end
   end
 
-  let(:client) { GitGraph::GitHub::Client.new(GitGraph::Configuration) }
+  let(:client) { GitGraph::GitHub::Client.new }
 
   context 'initialization' do
 

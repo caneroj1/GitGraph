@@ -1,4 +1,6 @@
 require 'octokit'
+require_relative '../configuration'
+require_relative 'graphable_object'
 
 module GitGraph
   module GitHub
@@ -6,14 +8,14 @@ module GitGraph
       attr_reader :client
       include Enumerable
 
-      def initialize(configuration)
+      def initialize
         @client = Octokit::Client.new(
-          login:    configuration.username,
-          password: configuration.password
+          login:    GitGraph::Configuration.username,
+          password: GitGraph::Configuration.password
         )
 
         @stored_users = {
-          configuration.username =>
+          GitGraph::Configuration.username =>
           @client.user
         }
       end
