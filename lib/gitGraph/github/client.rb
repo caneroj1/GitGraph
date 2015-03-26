@@ -29,7 +29,7 @@ module GitGraph
       alias_method :[], :get_user
 
       def add_user(user)
-        @stored_users[user] = @client.user user
+        @stored_users[user] = @client.user(user)
       end
       alias_method :<<, :add_user
 
@@ -43,7 +43,7 @@ module GitGraph
       end
 
       def compare_languages
-        data = GitGraph::GitHub::Feature.compare_languages(self)
+        data = GitGraph::GitHub::Feature.send(:compare_languages, self)
         graphable = GitGraph::GitHub::GraphableObject.new(data)
         @data_to_graph[:languages] = graphable
       end
