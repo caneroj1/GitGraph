@@ -43,6 +43,7 @@ module GitGraph
       end
 
       def format_options(options)
+        puts options
         options[:fill_alpha] ||= 0.2
         options[:stroke_alpha] ||= 1.0
         options[:point_stroke_color] ||= '#fff'
@@ -59,7 +60,7 @@ module GitGraph
       end
 
       def make_labels
-        "\tlabels: #{@labels.inspect},\n"
+        "\tlabels: #{@labels.map { |label| label.to_s }.inspect},\n"
       end
 
       def make_datasets
@@ -69,9 +70,9 @@ module GitGraph
         @datasets.each do |dataset|
           new_string = "\n\t\t{\n"
           dataset_string_components = []
-          
+
           dataset.each_pair do |key, value|
-            value = value.class.eql?(String) ? "\"#{value}\"" : value
+            value = value.class.eql?(String) ? "\"#{value}\"" : value.map { |item| [item[1]]}
             dataset_string_components.push("\t\t\t#{key}: #{value}")
           end
 

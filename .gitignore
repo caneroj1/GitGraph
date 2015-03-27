@@ -28,6 +28,7 @@ mkmf.log
 /_yardoc/
 /doc/
 /rdoc/
+examplefile.rb
 
 ## Environment normalisation:
 /.bundle/

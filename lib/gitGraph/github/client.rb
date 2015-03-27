@@ -2,6 +2,7 @@ require 'octokit'
 require_relative '../configuration'
 require_relative 'graphable_object'
 require_relative 'feature'
+require_relative '../renderer.rb'
 
 module GitGraph
   module GitHub
@@ -38,14 +39,22 @@ module GitGraph
       end
       alias_method :user_size, :user_count
 
+      def change_chart_type(graphable_object_name, chart_type)
+        @data_to_graph[graphable_object_name].chart_type = chart_type
+      end
+
       def each
         @stored_users.each { |name, user| yield(name, user) }
       end
 
-      def compare_languages
+      def compare_languages(chart, options = {})
         data = GitGraph::GitHub::Feature.send(:compare_languages, self)
-        graphable = GitGraph::GitHub::GraphableObject.new(data)
+        graphable = GitGraph::GitHub::GraphableObject.new(data, chart, options)
         @data_to_graph[:languages] = graphable
+      end
+
+      def render
+        @data_to_graph.each { |key, data| GitGraph::Renderer.render(data, key) }
       end
     end
   end
