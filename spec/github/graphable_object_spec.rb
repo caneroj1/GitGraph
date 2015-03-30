@@ -4,10 +4,19 @@ RSpec.describe GitGraph::GitHub::GraphableObject do
   let(:data) { GitGraph::GitHub::GraphableData.new(labels: nil, datasets: nil) }
 
   context 'attributes' do
-    let(:graphable) { GitGraph::GitHub::GraphableObject.new(data) }
+    let(:graphable) { GitGraph::GitHub::GraphableObject.new(data, nil, nil, "title") }
 
     it 'accepts options' do
       expect(graphable.options).to be_nil
+    end
+
+    it 'has a title' do
+      expect(graphable.title).to eq("title")
+    end
+
+    it 'can change the title' do
+      graphable.title = "new"
+      expect(graphable.title).to eq("new")
     end
 
     it 'has a default changed attribute' do
@@ -33,7 +42,7 @@ RSpec.describe GitGraph::GitHub::GraphableObject do
   end
 
   context 'changing chart type' do
-    let(:graphable) { GitGraph::GitHub::GraphableObject.new(data) }
+    let(:graphable) { GitGraph::GitHub::GraphableObject.new(data, nil, nil, nil) }
 
     it 'should mark the object as changed' do
       graphable.changed = false

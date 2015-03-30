@@ -43,7 +43,6 @@ module GitGraph
       end
 
       def format_options(options)
-        puts options
         options[:fill_alpha] ||= 0.2
         options[:stroke_alpha] ||= 1.0
         options[:point_stroke_color] ||= '#fff'
@@ -53,10 +52,28 @@ module GitGraph
 
       private
       def format_chart(new_options)
-        main_string = "var data = {\n"
+        main_string = make_options(new_options)
+        main_string << "\nvar data = {\n"
         main_string << make_labels
         main_string << make_datasets
         main_string << "\n};"
+      end
+
+      def make_options(new_options)
+        options_string = "var options = {\n"
+        opts_arr = []
+
+        new_options.each do |key, value|
+          if value.class.eql?(String)
+            opts_arr.push("\t#{key}: '#{value}'")
+          else
+            opts_arr.push("\t#{key}: #{value}")
+          end
+        end
+
+        options_string << opts_arr.join(",\n")
+        options_string << "\n};"
+        options_string
       end
 
       def make_labels

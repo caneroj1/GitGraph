@@ -3,15 +3,16 @@ require_relative 'graphable_data'
 module GitGraph
   module GitHub
     class GraphableObject
-      attr_accessor :changed, :data, :chart_type, :options
+      attr_accessor :changed, :data, :chart_type, :options, :title
       attr_reader :chart_string
 
       # data should be a graphable data object
-      def initialize(data, chart_type = nil, options = {})
+      def initialize(data, chart_type = nil, options = {}, title)
         @data = check_data_param(data)
         @options = options
         @changed = true
         @chart_type = chart_type || :line
+        @title = title
       end
 
       def chart_type=(chart_type)

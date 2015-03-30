@@ -40,7 +40,7 @@ RSpec.describe GitGraph::GitHub::Client do
       expect(client.get_user(username).login).to eq(username)
     end
 
-    it 'aliases get' do
+    it 'aliases get with []' do
       expect(client[username].login).to eq(username)
     end
 
@@ -48,14 +48,30 @@ RSpec.describe GitGraph::GitHub::Client do
       expect { client.add_user(ENV["testname"]) }.to change(client, :user_count).by 1
     end
 
-    it 'aliases store' do
+    it 'can add a new github user by number' do
+      expect(client.add_user(1).login).to_not eq("")
+    end
+
+    it 'aliases store with <<' do
       expect { client << ENV["testname"] }.to change(client, :user_count).by 1
+    end
+
+    it 'aliases store with +' do
+      expect { client + ENV["testname"] }.to change(client, :user_count).by 1
+    end
+
+    it 'can remove a github user' do
+      expect { client.remove_user(ENV["username"]) }.to change(client, :user_count).by -1
+    end
+
+    it 'aliases remove with -' do
+      expect { client - ENV["username"] }.to change(client, :user_count).by -1
     end
 
     specify { expect { |block| client.each(&block) }.to yield_control }
 
     it 'can compare languages' do
-      
+
     end
   end
 end

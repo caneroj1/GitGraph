@@ -41,8 +41,11 @@ def compare_languages(client)
 
   # sort on the array by key
   datasets.each { |dataset| dataset[:data].sort! { |a, b| a[0] <=> b[0] } }
-  puts datasets.inspect
-  
+
+  # each value in the array represents bytes of code written in a language.
+  # convert each value in the array to kilobytes written in each language
+  datasets.each { |dataset| dataset[:data].each { |data| data[1] /= 1024} }
+
   # return a new graphable data item
   GitGraph::GitHub::GraphableData.new(labels: languages, datasets: datasets)
 end

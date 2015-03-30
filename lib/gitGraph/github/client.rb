@@ -30,9 +30,16 @@ module GitGraph
       alias_method :[], :get_user
 
       def add_user(user)
-        @stored_users[user] = @client.user(user)
+        user_to_add = @client.user(user)
+        @stored_users[user_to_add.login] = user_to_add
       end
       alias_method :<<, :add_user
+      alias_method :+, :add_user
+
+      def remove_user(user)
+        @stored_users.delete(user)
+      end
+      alias_method :-, :remove_user
 
       def user_count
         @stored_users.count
@@ -47,9 +54,11 @@ module GitGraph
         @stored_users.each { |name, user| yield(name, user) }
       end
 
-      def compare_languages(chart, options = {})
+      def compare_languages(chart, **options)
+        options ||= {}
+        title = options.delete(:title) || "Kilobytes Written per Language"
         data = GitGraph::GitHub::Feature.send(:compare_languages, self)
-        graphable = GitGraph::GitHub::GraphableObject.new(data, chart, options)
+        graphable = GitGraph::GitHub::GraphableObject.new(data, chart, options, title)
         @data_to_graph[:languages] = graphable
       end
 
