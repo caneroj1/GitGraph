@@ -62,8 +62,9 @@ module GitGraph
         @data_to_graph[:languages] = graphable
       end
 
-      def render
-        @data_to_graph.each { |key, data| GitGraph::Renderer.render(data, key) }
+      def render(path)
+        @data_to_graph.each { |key, data| GitGraph::Renderer.render(data, key, path) }
+        GitGraph::Renderer.copy_files(path)
       end
     end
   end

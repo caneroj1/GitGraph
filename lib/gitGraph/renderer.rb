@@ -3,20 +3,28 @@ require 'erb'
 module GitGraph
   class Renderer
     class << self
-      def render(graphable_object, label)
+      def copy_files(path)
+        filepath = File.dirname(__FILE__)
+        Dir.chdir(filepath)
+        Dir.chdir("../../vendor")
+        Dir.entries(Dir.pwd).each { |file| `cp #{file} #{path}/` if !File.directory?(file) }
+      end
+
+      def render(graphable_object, label, path)
         if graphable_object.changed
           graphable_object.stringify
 
           make_file(graphable_object.chart_string,
                     label,
                     graphable_object.chart_type_to_string,
-                    graphable_object.title)
+                    graphable_object.title,
+                    path)
 
           graphable_object.changed = false
         end
       end
 
-      def make_file(html, id, chart_type, title)
+      def make_file(html, id, chart_type, title, path)
         output =
         <<-HTML
 <html style='background-color: whitesmoke;'>
@@ -28,7 +36,7 @@ module GitGraph
     <script>
     #{html}
     </script>
-    <script src="Chart2.min.js"></script>
+    <script src="Chartjs.min.js"></script>
     <script src="jquery-1.10.1.min.js"></script>
     <script src="legend.js"></script>
   </body>
@@ -40,7 +48,7 @@ module GitGraph
 </html>
         HTML
 
-        File.open("/Users/joecanero/Desktop/#{id}.html", "w") { |f| f.write(ERB.new(output).result(binding)) }
+        File.open("#{path}/#{id}.html", "w") { |f| f.write(ERB.new(output).result(binding)) }
       end
     end
   end
