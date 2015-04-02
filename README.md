@@ -20,7 +20,41 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# configuring the client
+GitGraph::Configuration.config do |config|
+  config.username = # your github username
+  config.password = # your github password
+end
+
+# your GitGraph client is now all configured to access GitHub's apis
+client = GitGraph::GitHub::Client.new
+
+# start adding GitHub users
+client << # some github username
+
+client + # another github username
+
+# you can also github users using integers.
+## CAUTION: these are not guaranteed to exist. ##
+
+client + 1
+
+# let's run a language comparison. this checks all of
+# the public repositories for each added user and tallies
+# up their language usage.
+client.compare_languages(:radar) # using a radar chart
+
+# we can change to a bar chart
+# the compare languages feature is indexed under
+# the :languages key.
+client.change_chart_type(:languages, :bar)
+
+# let's render our chart
+path = # path to where you want the chart
+client.render(path)
+
+```
 
 ## Contributing
 
