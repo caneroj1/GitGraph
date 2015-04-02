@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["caneroj1@tcnj.edu"]
   spec.summary       = %q{Displays nice graphs of GitHub usage through a Rack App.}
   spec.description   = %q{Displays nice graphs of GitHub usage through a Rack App. Can help you analyze things like what languages you most frequently push in, etc.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/caneroj1/GitGraph"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

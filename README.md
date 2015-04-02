@@ -58,6 +58,24 @@ client.render(path)
 
 ```
 
+## Pictures
+<h1>Compare Languages Feature</h1>
+<p>Example graph with one user.</p>
+<img src="media/oneUserNoLabel.png">
+<br/>
+
+<p>Example graph with one user, with a label.</p>
+<img src="media/oneUserWithLabel.png">
+<br/>
+
+<p>Example graph with two users.</p>
+<img src="media/twoUsersNoLabel.png">
+<br/>
+
+<p>Example graph with two users, with a label.</p>
+<img src="media/twoUsersWithLabel.png">
+<br/>
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/gitGraph/fork )
