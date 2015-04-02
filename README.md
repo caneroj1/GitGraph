@@ -1,6 +1,6 @@
 # GitGraph
 
-TODO: Write a gem description
+Displays nice graphs of GitHub usage through a Rack App. Can help you analyze things like what languages you most frequently push in, etc.
 
 ## Installation
 
@@ -21,6 +21,8 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
+require 'gitGraph'
+
 # configuring the client
 GitGraph::Configuration.config do |config|
   config.username = # your github username
