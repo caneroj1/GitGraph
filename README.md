@@ -103,8 +103,8 @@ path = # path to where you want the chart
 client.render(path)
 ```
 
-## Pictures
-<h1>Compare Languages Feature</h1>
+# Pictures
+##Compare Languages Feature
 <p>Example graph with one user.</p>
 <img src="media/oneUserNoLabel.png">
 <br/>
