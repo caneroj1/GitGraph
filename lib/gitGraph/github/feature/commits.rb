@@ -59,7 +59,7 @@ def commits(client)
     date_two = b.split('/')
     Time.new(date_one[2], date_one[0], date_one[1]) <=> Time.new(date_two[2], date_two[0], date_two[1])
   end
-  
+
   # return a new graphable data item
   GitGraph::GitHub::GraphableData.new(labels: dates, datasets: datasets)
 end

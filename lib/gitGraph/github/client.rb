@@ -89,6 +89,25 @@ module GitGraph
         @data_to_graph[:commits] = graphable
       end
 
+      def issues(**options)
+        options ||= {}
+
+        title1 = options.delete(:title_for_issues_by_date) || "Issues by Date"
+        title2 = options.delete(:title_for_issue_types) || "Issues by Type"
+        chart1 = options.delete(:chart_for_issue_dates) || :line
+        chart2 = options.delete(:chart_for_issue_types) || :bar
+
+        data_items = GitGraph::GitHub::Feature.send(:issues, self)
+
+        data_items.each_with_index do |item, index|
+          title = eval local_variables[local_variables.find_index("title#{index+1}".to_sym)].to_s
+          chart = eval local_variables[local_variables.find_index("chart#{index+1}".to_sym)].to_s
+          
+          graphable = GitGraph::GitHub::GraphableObject.new(item, chart, options, title)
+          @data_to_graph["issues#{index + 1}".to_sym] = graphable
+        end
+      end
+
       def render(path)
         @data_to_graph.each { |key, data| GitGraph::Renderer.render(data, key, path) }
         GitGraph::Renderer.copy_files(path)
