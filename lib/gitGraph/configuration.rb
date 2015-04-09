@@ -1,7 +1,7 @@
 module GitGraph
   class Configuration
     class << self
-      attr_accessor :username, :password
+      attr_accessor :username, :password, :access_token
 
       def config
         raise ArgumentError, block_error if !block_given?

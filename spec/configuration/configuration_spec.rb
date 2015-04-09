@@ -19,6 +19,14 @@ RSpec.describe GitGraph::Configuration do
     it 'should have a getter for password' do
       expect(method_list).to include(:password)
     end
+
+    it 'should have a setter for access token' do
+      expect(method_list).to include(:access_token=)
+    end
+
+    it 'should have a getter for access token' do
+      expect(method_list).to include(:access_token)
+    end
   end
 
   context 'configuring' do
@@ -26,7 +34,7 @@ RSpec.describe GitGraph::Configuration do
       expect{ GitGraph::Configuration.config }.to raise_error(ArgumentError)
     end
 
-    context 'execution' do
+    context 'execution without access token' do
       before(:each) do
         GitGraph::Configuration.config do |config|
           config.username = "username"
@@ -40,6 +48,32 @@ RSpec.describe GitGraph::Configuration do
 
       it 'should set the password' do
         expect(GitGraph::Configuration.password).to eq("password")
+      end
+
+      it 'should have a nil access token' do
+        expect(GitGraph::Configuration.access_token).to be_nil
+      end
+    end
+
+    context 'execution with access token' do
+      before(:each) do
+        GitGraph::Configuration.config do |config|
+          config.username = "username"
+          config.password = "password"
+          config.access_token = "access token"
+        end
+      end
+
+      it 'should set the username' do
+        expect(GitGraph::Configuration.username).to eq("username")
+      end
+
+      it 'should set the password' do
+        expect(GitGraph::Configuration.password).to eq("password")
+      end
+
+      it 'should set the access token' do
+        expect(GitGraph::Configuration.access_token).to eq("access token")
       end
     end
   end

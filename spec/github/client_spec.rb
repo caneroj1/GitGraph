@@ -5,6 +5,7 @@ RSpec.describe GitGraph::GitHub::Client do
     GitGraph::Configuration.config do |config|
         config.username = ENV["username"]
         config.password = ENV["password"]
+        config.access_token = ENV["access_token"]
     end
   end
 
@@ -32,6 +33,10 @@ RSpec.describe GitGraph::GitHub::Client do
 
     it 'should only create one user when initialized' do
       expect(client.user_count).to eq(1)
+    end
+
+    it 'should have an access token' do
+      expect(client.client.access_token).to_not be_nil
     end
   end
 
@@ -71,7 +76,34 @@ RSpec.describe GitGraph::GitHub::Client do
     specify { expect { |block| client.each(&block) }.to yield_control }
 
     it 'can compare languages' do
+    end
 
+    it 'can return the number of repos stored' do
+      expect(client.repo_count).to eq(0)
+    end
+
+    it 'aliases the number of repos stored' do
+      expect(client.repo_size).to eq(0)
+    end
+
+    context 'repository functionality' do
+      before(:each) do
+        client.add_repo('caneroj1/GitGraph')
+      end
+
+      it 'has repositories' do
+        expect(client.repo_count).to eq(1)
+      end
+
+      specify { expect { |block| client.each_repo(&block) }.to yield_control }
+
+      it 'can store a repository name' do
+        expect { client.add_repo('caneroj1/GitGraph') }.to change(client, :repo_count).by 1
+      end
+
+      it 'can remove a repository' do
+        expect { client.remove_repo('caneroj1/GitGraph') }.to change(client, :repo_count).by -1
+      end
     end
   end
 end
