@@ -104,7 +104,7 @@ client.render(path)
 ```
 
 # Pictures
-##Compare Languages Feature
+### Compare Languages Feature
 <p>Example graph with one user.</p>
 <img src="media/oneUserNoLabel.png">
 <br/>
@@ -121,7 +121,7 @@ client.render(path)
 <img src="media/twoUsersWithLabel.png">
 <br/>
 
-<h1>Commits per Day Feature</h1>
+### Commits per Day Feature
 <p>I decided to use some real repositories to showcase this.</p>
 <img src="media/commitsPerDay.png">
 <br/>
