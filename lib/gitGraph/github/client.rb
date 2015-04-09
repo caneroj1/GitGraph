@@ -12,8 +12,9 @@ module GitGraph
 
       def initialize
         @client = Octokit::Client.new(
-          login:    GitGraph::Configuration.username,
-          password: GitGraph::Configuration.password
+          login:        GitGraph::Configuration.username,
+          password:     GitGraph::Configuration.password,
+          access_token: GitGraph::Configuration.access_token
         )
 
         @stored_users = {
@@ -22,6 +23,7 @@ module GitGraph
         }
 
         @data_to_graph = {}
+        @repos = []
       end
 
       def get_user(key)
@@ -36,15 +38,28 @@ module GitGraph
       alias_method :<<, :add_user
       alias_method :+, :add_user
 
+      def add_repo(repo_name)
+        @repos.push(repo_name)
+      end
+
       def remove_user(user)
         @stored_users.delete(user)
       end
       alias_method :-, :remove_user
 
+      def remove_repo(repo_name)
+        @repos.delete(repo_name)
+      end
+
       def user_count
         @stored_users.count
       end
       alias_method :user_size, :user_count
+
+      def repo_count
+        @repos.count
+      end
+      alias_method :repo_size, :repo_count
 
       def change_chart_type(graphable_object_name, chart_type)
         @data_to_graph[graphable_object_name].chart_type = chart_type
@@ -54,12 +69,24 @@ module GitGraph
         @stored_users.each { |name, user| yield(name, user) }
       end
 
+      def each_repo
+        @repos.each { |repo| yield(repo) }
+      end
+
       def compare_languages(chart, **options)
         options ||= {}
         title = options.delete(:title) || "Kilobytes Written per Language"
         data = GitGraph::GitHub::Feature.send(:compare_languages, self)
         graphable = GitGraph::GitHub::GraphableObject.new(data, chart, options, title)
         @data_to_graph[:languages] = graphable
+      end
+
+      def commits(**options)
+        options ||= {}
+        title = options.delete(:title) || "Commits per Day"
+        data = GitGraph::GitHub::Feature.send(:commits, self)
+        graphable = GitGraph::GitHub::GraphableObject.new(data, :line, options, title)
+        @data_to_graph[:commits] = graphable
       end
 
       def render(path)
