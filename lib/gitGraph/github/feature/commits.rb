@@ -17,8 +17,8 @@ def commits(client)
       data: {}
     }
 
-    client.commits(repo)
-    last_response = client.last_response
+    client.client.commits(repo)
+    last_response = client.client.last_response
     loop do
       last_response.data.each do |data|
         date = data[:commit][:author][:date].strftime('%-m/%d/%Y')
@@ -48,12 +48,18 @@ def commits(client)
 
   # sort on the array by key
   datasets.each { |dataset| dataset[:data].sort! do |a, b|
-    Time.new(a[0]) <=> Time.new(b[0])
+    date_one = a[0].split('/')
+    date_two = b[0].split('/')
+    Time.new(date_one[2], date_one[0], date_one[1]) <=> Time.new(date_two[2], date_two[0], date_two[1])
   end }
 
   # convert the dates set into a sorted array
-  dates = dates.to_a.sort { |a, b| Time.new(a) <=> Time.new(b) }
-
+  dates = dates.to_a.sort do |a, b|
+    date_one = a.split('/')
+    date_two = b.split('/')
+    Time.new(date_one[2], date_one[0], date_one[1]) <=> Time.new(date_two[2], date_two[0], date_two[1])
+  end
+  
   # return a new graphable data item
   GitGraph::GitHub::GraphableData.new(labels: dates, datasets: datasets)
 end
